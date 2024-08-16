@@ -1,0 +1,286 @@
+from slots_class import Slot
+import os
+import random
+import sys
+
+#function 1
+class Player:
+
+    def __init__(self, balance, name):
+        self.balance = balance
+        self.name = name
+        self.amount = 0
+        self.number = 0
+        self.gamechoice = 0
+        self.bet_type = ""
+
+    def r_bet(self):
+        while True:
+            self.bet_type = input("\nWould you like to bet on 'Red', 'Black', 'Evens', 'Odds', or a 'Number'? ")
+            if self.bet_type.lower().strip() == "red":
+                self.bet_type = "red"
+                break
+            elif self.bet_type.lower().strip() == "black":
+                self.bet_type = "black"
+                break
+            elif self.bet_type.lower().strip() == "evens":
+                self.bet_type = "even"
+                break
+            elif self.bet_type.lower().strip() == "odds":
+                self.bet_type = "odd"
+                break
+            elif self.bet_type.lower().strip() == "number":
+                self.bet_type = "number"
+                break
+            else:
+                print("\nPlease type in 'Red', 'Black', 'Evens', 'Odds', or a Number'")
+
+    def game(self):
+        while True:
+            self.gamechoice = input("\nWould you like to play Roulette or Slots today? ")
+            if self.gamechoice.lower().strip() == "roulette":
+                self.gamechoice = 1
+                break
+            elif self.gamechoice.lower().strip() == "slots":
+                self.gamechoice = 2
+                break
+            else:
+                print("\nPlease type in 'Roulette' or 'Slots'")
+
+
+
+
+
+    @classmethod
+    def get(cls):
+        balance = random.randint(10,100)
+        while True:
+            try:
+                name = input("\nWhat is your name? ")
+                if name.strip().isalpha():
+                    return cls(balance, name)
+                else:
+                    print("Invalid Name")
+            except EOFError:
+                pass
+
+    def __str__(self):
+        return(f"\nHello {self.name}, you have ${self.balance} available" )
+
+    def bet(self):
+        while True:
+            try:
+                self.amount = int((input("\nHow much would you like to bet? ")))
+                if (self.amount) <= self.balance and self.amount > 0:
+                    self.balance -= (self.amount)
+                    break
+                else:
+                    print("Insufficient Funds or Invalid Negative Number Entered")
+            except ValueError:
+                print("\nPlease enter a whole number with no other characters")
+                pass
+
+    def get_num(self):
+        while True:
+            self.number = int(input("Which number would you like to bet on? "))
+            if 0 <= self.number <= 38:
+                return self.number
+            else:
+                print("Please enter a number between 0-38")
+
+
+    def check(self, winnings):
+        self.balance += winnings
+        if winnings == 0 and self.balance == 0:
+            os.system('clear')
+            sys.exit(f"\n\n\n\n\n⚠️  GAME OVER ⚠️\n\n\nUH OH {self.name}, you lost it ALL!\n\n\n⚠️  GAME OVER ⚠️\n\n\n")
+        print(f"\nYou now have ${self.balance} available\n(Enter Ctrl/Cmd D at any point to exit)")
+
+#function 2
+class Slot():
+    char = ["⭐","🍒","🍀"]
+    winchar = ["⭐"] #used for testing purposes to guarantee a win
+    losechar = ["🍒"] #used for testing purposes to guarantee a loss
+    def __init__(self):
+        self.first = 0
+        self.second = 0
+        self.third = 0
+        self.winnings = 0
+
+    def play(self,amount, name):
+        self.first = random.choice(self.char)
+        self.second = random.choice(self.char)
+        self.third = random.choice(self.char)
+        os.system('clear')
+        print(f"\n\n{self.first}|{self.second}|{self.third}")
+        if self.first == self.second == self.third:
+            self.winnings = int(amount*5)
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+        else:
+            self.winnings = 0
+            print("\nBetter luck next time!")
+
+    def testwin(self,amount, name):
+        self.first = self.winchar
+        self.second = self.winchar
+        self.third = self.winchar
+        os.system('clear')
+        print(f"\n\n{self.first}|{self.second}|{self.third}")
+        if self.first == self.second == self.third:
+            self.winnings = int(amount*5)
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+        else:
+            self.winnings = 0
+            print("\nBetter luck next time!")
+
+
+    def testloss(self,amount, name):
+        self.first = self.winchar
+        self.second = self.losechar
+        self.third = self.winchar
+        os.system('clear')
+        print(f"\n\n{self.first}|{self.second}|{self.third}")
+        if self.first == self.second == self.third:
+            self.winnings = int(amount*5)
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+        else:
+            self.winnings = 0
+            print("\nBetter luck next time!")
+#function 3
+class Roulette:
+    choices = ["🔴", "⚫"]
+    def __init__(self):
+        self.number = 0
+        self.color = None
+        self.winnings = 0
+
+    def testevenwin(self,amount, name):
+        color = "🔴"
+        number = 6
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{color}:{number}")
+        if number % 2 == 0:
+            self.winnings = amount+amount
+            print(f"Good job {name}, you won {self.winnings}!")
+        else:
+            print("Better luck next time!")
+            self.winnings = 0
+    def bet_even(self,amount,name):
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{self.color}:{self.number}")
+        if self.number % 2 == 0:
+            self.winnings = amount+amount
+            print(f"Good job {name}, you won {self.winnings}!")
+        else:
+            print("Better luck next time!")
+            self.winnings = 0
+
+
+    def bet_odd(self,amount,name):
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{self.color}:{self.number}")
+        if self.number % 2 != 0:
+            self.winnings = amount*2
+            print(f"\nGood job {name}, you won {self.winnings}!")
+        else:
+            print("\nBetter luck next time!")
+            self.winnings = 0
+
+
+
+    def bet_red(self,amount,name):
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{self.color}:{self.number}")
+        if self.color == "🔴":
+            self.winnings = amount*2
+            print(f"\nGood job {name}, you won {self.winnings}!")
+        else:
+            print("\nBetter luck next time!")
+            self.winnings = 0
+
+
+
+    def bet_black(self,amount,name):
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{self.color}:{self.number}")
+        if self.color != "🔴":
+            self.winnings = amount*2
+            print(f"\nGood job {name}, you won {self.winnings}!")
+        else:
+            print("\nBetter luck next time!")
+            self.winnings = 0
+
+    def bet_num(self,amount,name,number):
+        self.spin()
+        os.system('clear')
+        print(f"\n\n{self.color}:{self.number}")
+        if number == self.number:
+            self.winnings = amount*35
+            print(f"\nGood job {name}, you won {self.winnings}!")
+        else:
+            print("\nBetter luck next time!")
+            self.winnings = 0
+
+
+    def spin(self):
+        self.number = random.randint(0,38)
+        self.color = random.choice(self.choices)
+
+
+
+#main function
+def main():
+    print("\n********************\nWelcome to CS_ino_50!", end="\n********************\n\n")
+    p1 = Player.get()
+    r1 = Roulette()
+    s1 = Slot()
+    print(p1)
+    p1.game()
+    while True:
+        try:
+            while p1.gamechoice == 1:
+                    p1.r_bet()
+                    p1.bet()
+                    amount = p1.amount
+                    name = p1.name
+                    if p1.bet_type == "red":
+                        r1.bet_red(amount, name)
+                        p1.check(r1.winnings)
+                    elif p1.bet_type == "black":
+                        r1.bet_black(amount, name)
+                        p1.check(r1.winnings)
+                    elif p1.bet_type == "even":
+                        r1.bet_even(amount, name)
+                        p1.check(r1.winnings)
+                    elif p1.bet_type == "odd":
+                        r1.bet_odd(amount, name)
+                        p1.check(r1.winnings)
+                    elif p1.bet_type == "number":
+                        num = p1.get_num()
+                        r1.bet_num(amount, name, num)
+                        p1.check(r1.winnings)
+                    p1.game()
+            while p1.gamechoice == 2:
+                p1.bet()
+                amount = p1.amount
+                name = p1.name
+                s1.play(amount, name)
+                p1.check(s1.winnings)
+                p1.game()
+
+        except EOFError:
+            os.system('clear')
+            print(f"\nThanks for playing {p1.name}")
+            print(f"Your final balance was ${p1.balance}")
+            return False
+
+
+
+
+if __name__=="__main__":
+    main()
