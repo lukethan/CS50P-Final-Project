@@ -15,19 +15,19 @@ class Player:
     def r_bet(self):
         while True:
             self.bet_type = input("\nWould you like to bet on 'Red', 'Black', 'Evens', 'Odds', or a 'Number'? ")
-            if self.bet_type.lower() == "red":
+            if self.bet_type.lower().strip() == "red":
                 self.bet_type = "red"
                 break
-            elif self.bet_type.lower() == "black":
+            elif self.bet_type.lower().strip() == "black":
                 self.bet_type = "black"
                 break
-            elif self.bet_type.lower() == "evens":
+            elif self.bet_type.lower().strip() == "evens":
                 self.bet_type = "even"
                 break
-            elif self.bet_type.lower() == "odds":
+            elif self.bet_type.lower().strip() == "odds":
                 self.bet_type = "odd"
                 break
-            elif self.bet_type.lower() == "number":
+            elif self.bet_type.lower().strip() == "number":
                 self.bet_type = "number"
                 break
             else:
@@ -35,11 +35,11 @@ class Player:
 
     def game(self):
         while True:
-            self.gamechoice = input("\nWhich game would you like to play today? ")
-            if self.gamechoice.lower() == "roulette":
+            self.gamechoice = input("\nWould you like to play Roulette or Slots today? ")
+            if self.gamechoice.lower().strip() == "roulette":
                 self.gamechoice = 1
                 break
-            elif self.gamechoice.lower() == "slots":
+            elif self.gamechoice.lower().strip() == "slots":
                 self.gamechoice = 2
                 break
             else:
@@ -53,23 +53,30 @@ class Player:
     def get(cls):
         balance = random.randint(10,100)
         while True:
-            name = input("What is your name? ")
-            if name.strip().isalpha():
-                return cls(balance, name)
-            else:
-                print("Invalid Name")
+            try:
+                name = input("\nWhat is your name? ")
+                if name.strip().isalpha():
+                    return cls(balance, name)
+                else:
+                    print("Invalid Name")
+            except EOFError:
+                pass
 
     def __str__(self):
         return(f"\nHello {self.name}, you have ${self.balance} available" )
 
     def bet(self):
         while True:
-            self.amount = int(input("\nHow much would you like to bet? "))
-            if self.amount <= self.balance:
-                self.balance -= self.amount
-                break
-            else:
-                print("Insufficient Funds")
+            try:
+                self.amount = int((input("\nHow much would you like to bet? ")))
+                if (self.amount) <= self.balance and self.amount > 0:
+                    self.balance -= (self.amount)
+                    break
+                else:
+                    print("Insufficient Funds or Invalid Negative Number Entered")
+            except ValueError:
+                print("\nPlease enter a whole number with no other characters")
+                pass
 
     def get_num(self):
         while True:
@@ -79,13 +86,11 @@ class Player:
             else:
                 print("Please enter a number between 0-38")
 
-    # def win(self, winnings):
-    #     self.balance += winnings
 
     def check(self, winnings):
         self.balance += winnings
         if winnings == 0 and self.balance == 0:
             os.system('clear')
-            sys.exit(f"\n\n\n\n\n⚠️  GAME OVER ⚠️\n\n\nUH OH{self.name}, you lost it ALL!\n\n\n⚠️  GAME OVER ⚠️\n\n\n")
-        print(f"\nYou now have ${self.balance} available")
+            sys.exit(f"\n\n\n\n\n⚠️  GAME OVER ⚠️\n\n\nUH OH {self.name}, you lost it ALL!\n\n\n⚠️  GAME OVER ⚠️\n\n\n")
+        print(f"\nYou now have ${self.balance} available\n(Enter Ctrl/Cmd D at any point to exit)")
 
