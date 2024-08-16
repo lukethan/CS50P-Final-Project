@@ -4,7 +4,8 @@ import os
 
 class Slot():
     char = ["⭐","🍒","🍀"]
-    # char = ["⭐"]
+    winchar = ["⭐"] #used for testing purposes to guarantee a win
+    losechar = ["🍒"] #used for testing purposes to guarantee a loss
     def __init__(self):
         self.first = 0
         self.second = 0
@@ -19,21 +20,34 @@ class Slot():
         print(f"\n\n{self.first}|{self.second}|{self.third}")
         if self.first == self.second == self.third:
             self.winnings = int(amount*5)
-            print(f"Congrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
         else:
             self.winnings = 0
-            print("Better luck next time!")
+            print("\nBetter luck next time!")
 
-    # def play(cls, balance, amount):
-    #     first = random.choice(char)
-    #     second = random.choice(char)
-    #     third = random.choice(char)
-    #     print(f"{first}|{second}|{third}")
-    #     if first == second == third:
-    #         winnings = int(amount*5)
-    #         print(f"YOU JUST WON ${winnings}!!!!!")
-    #         balance += winnings
-    #         return cls(balance)
-    #     else:
-    #         return cls(balance)
+    def testwin(self,amount, name):
+        self.first = self.winchar
+        self.second = self.winchar
+        self.third = self.winchar
+        os.system('clear')
+        print(f"\n\n{self.first}|{self.second}|{self.third}")
+        if self.first == self.second == self.third:
+            self.winnings = int(amount*5)
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+        else:
+            self.winnings = 0
+            print("\nBetter luck next time!")
+
+    def testloss(self,amount, name):
+        self.first = self.winchar
+        self.second = self.losechar
+        self.third = self.winchar
+        os.system('clear')
+        print(f"\n\n{self.first}|{self.second}|{self.third}")
+        if self.first == self.second == self.third:
+            self.winnings = int(amount*5)
+            print(f"\nCongrats {name}, YOU JUST WON ${self.winnings}!!!!!")
+        else:
+            self.winnings = 0
+            print("\nBetter luck next time!")
 
